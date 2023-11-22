@@ -54,14 +54,30 @@
 		902643C22B0E9E0400AC9EA8 /* Talkey */ = {
 			isa = PBXGroup;
 			children = (
-				902643C32B0E9E0400AC9EA8 /* AppDelegate.swift */,
-				902643C52B0E9E0400AC9EA8 /* SceneDelegate.swift */,
+				902643D72B0E9E6A00AC9EA8 /* App */,
+				902643D82B0E9E7900AC9EA8 /* View */,
 				902643C72B0E9E0400AC9EA8 /* ViewController.swift */,
 				902643CC2B0E9E0600AC9EA8 /* Assets.xcassets */,
 				902643CE2B0E9E0600AC9EA8 /* LaunchScreen.storyboard */,
 				902643D12B0E9E0600AC9EA8 /* Info.plist */,
 			);
 			path = Talkey;
+			sourceTree = "<group>";
+		};
+		902643D72B0E9E6A00AC9EA8 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				902643C32B0E9E0400AC9EA8 /* AppDelegate.swift */,
+				902643C52B0E9E0400AC9EA8 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		902643D82B0E9E7900AC9EA8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
