@@ -8,7 +8,7 @@
 import UIKit
 import Firebase
 
-class LogInController: UIViewController {
+class LoginController: UIViewController {
 
     // MARK: - Views
     
@@ -52,7 +52,7 @@ class LogInController: UIViewController {
     }
 }
 
-extension LogInController: LoginViewDelegate {
+extension LoginController: LoginViewDelegate {
     func loginButtonIsTapped(email: String, password: String) {
         signInUser(email: email, password: password)
     }

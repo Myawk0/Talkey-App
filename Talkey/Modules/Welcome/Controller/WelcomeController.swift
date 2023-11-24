@@ -40,7 +40,7 @@ extension WelcomeController: WelcomeViewDelegate {
     }
     
     func loginButtonIsTapped() {
-        let loginController = LogInController()
+        let loginController = LoginController()
         navigationController?.pushViewController(loginController, animated: true)
     }
 }

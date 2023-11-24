@@ -13,6 +13,7 @@ import Firebase
 protocol ChatViewDelegate: AnyObject {
     var countMessages: Int { get }
     var isCurrentUser: Bool { get }
+    
     func getMessages(at index: Int) -> Message
     func sendMessage(with message: String)
 }
@@ -27,11 +28,19 @@ class ChatView: UIView {
         let tableView = UITableView()
         tableView.backgroundColor = .white
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 80
+        tableView.estimatedRowHeight = 70
         tableView.sizeToFit()
-        //tableView.separatorStyle = .none
+        tableView.separatorStyle = .none
         tableView.register(MessageCell.self, forCellReuseIdentifier: MessageCell.reuseIdentifier)
         return tableView
+    }()
+    
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 5
+        stackView.alignment = .top
+        return stackView
     }()
     
     private lazy var chatView: UIView = {
@@ -94,9 +103,9 @@ class ChatView: UIView {
     private func addSubviews() {
         addSubview(tableView)
         
-        addSubview(chatView)
-        chatView.addSubview(messageTextField)
-        chatView.addSubview(sendButton)
+        addSubview(stackView)
+        stackView.addArrangedSubview(messageTextField)
+        stackView.addArrangedSubview(sendButton)
     }
     
     // MARK: - Constraints
@@ -104,25 +113,23 @@ class ChatView: UIView {
     private func applyConstraints() {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(chatView.snp.top)
+            make.leading.trailing.equalToSuperview().inset(10)
+            make.bottom.equalTo(stackView.snp.top).offset(-10)
         }
         
-        chatView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview()
-            make.height.equalTo(100)
-            make.leading.trailing.equalToSuperview()
+        stackView.snp.makeConstraints { make in
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
+            make.height.equalTo(50)
+            make.leading.equalToSuperview().inset(16)
+            make.trailing.equalToSuperview().inset(10)
         }
         
         messageTextField.snp.makeConstraints { make in
             make.height.equalTo(50)
-            make.trailing.equalTo(sendButton.snp.leading).offset(-20)
-            make.leading.top.equalToSuperview().inset(20)
         }
         
         sendButton.snp.makeConstraints { make in
             make.height.width.equalTo(50)
-            make.trailing.top.equalToSuperview().inset(20)
         }
     }
 }
@@ -150,7 +157,7 @@ extension ChatView: UITextFieldDelegate {
 
 extension ChatView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100.0
+        return UITableView.automaticDimension
     }
 }
 
@@ -163,8 +170,9 @@ extension ChatView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MessageCell.reuseIdentifier, for: indexPath) as! MessageCell
         
-        let message = delegate?.getMessages(at: indexPath.row)
-        cell.updateMessages(with: message?.body)
+        if let message = delegate?.getMessages(at: indexPath.row) {
+            cell.updateMessages(with: message.body, time: message.date)
+        }
         
         let isCurrentUser = delegate?.isCurrentUser
         cell.updateAppearanceOfCell(if: isCurrentUser)

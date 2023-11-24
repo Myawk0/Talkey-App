@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import Firebase
 
 struct Message {
     let sender: String
     let body: String
+    let date: Timestamp
 }
