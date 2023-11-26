@@ -14,7 +14,7 @@
 		900E87752B0EA9F800D67DB9 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900E87702B0EA9F800D67DB9 /* MessageCell.swift */; };
 		900E877C2B0EAA1900D67DB9 /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900E87782B0EAA1900D67DB9 /* ChatController.swift */; };
 		900E877D2B0EAA1900D67DB9 /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900E87792B0EAA1900D67DB9 /* RegisterController.swift */; };
-		900E877E2B0EAA1900D67DB9 /* LogInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900E877A2B0EAA1900D67DB9 /* LogInController.swift */; };
+		900E877E2B0EAA1900D67DB9 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900E877A2B0EAA1900D67DB9 /* LoginController.swift */; };
 		900E877F2B0EAA1900D67DB9 /* WelcomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900E877B2B0EAA1900D67DB9 /* WelcomeController.swift */; };
 		900E87822B0EAA2600D67DB9 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900E87802B0EAA2500D67DB9 /* Message.swift */; };
 		900E87832B0EAA2600D67DB9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900E87812B0EAA2600D67DB9 /* Constants.swift */; };
@@ -43,7 +43,7 @@
 		900E87702B0EA9F800D67DB9 /* MessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		900E87782B0EAA1900D67DB9 /* ChatController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatController.swift; sourceTree = "<group>"; };
 		900E87792B0EAA1900D67DB9 /* RegisterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
-		900E877A2B0EAA1900D67DB9 /* LogInController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInController.swift; sourceTree = "<group>"; };
+		900E877A2B0EAA1900D67DB9 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		900E877B2B0EAA1900D67DB9 /* WelcomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeController.swift; sourceTree = "<group>"; };
 		900E87802B0EAA2500D67DB9 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		900E87812B0EAA2600D67DB9 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -213,7 +213,7 @@
 		900E87A82B0F710900D67DB9 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				900E877A2B0EAA1900D67DB9 /* LogInController.swift */,
+				900E877A2B0EAA1900D67DB9 /* LoginController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -390,7 +390,7 @@
 				900E87AD2B0FE4AE00D67DB9 /* Date.swift in Sources */,
 				900E879A2B0F4A0F00D67DB9 /* UIView.swift in Sources */,
 				900E87832B0EAA2600D67DB9 /* Constants.swift in Sources */,
-				900E877E2B0EAA1900D67DB9 /* LogInController.swift in Sources */,
+				900E877E2B0EAA1900D67DB9 /* LoginController.swift in Sources */,
 				900E877C2B0EAA1900D67DB9 /* ChatController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

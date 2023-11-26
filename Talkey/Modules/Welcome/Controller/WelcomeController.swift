@@ -31,6 +31,12 @@ class WelcomeController: UIViewController {
         super.loadView()
         self.view = welcomeView
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        welcomeView.startTitleAnimation()
+    }
 }
 
 extension WelcomeController: WelcomeViewDelegate {

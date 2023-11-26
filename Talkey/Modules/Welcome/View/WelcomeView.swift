@@ -21,14 +21,13 @@ class WelcomeView: UIView {
     
     private lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "chat")//?.withTintColor(UIColor.brandPurple!, renderingMode: .alwaysOriginal)
+        imageView.image = UIImage(named: "chat")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     private lazy var titleLabel: CLTypingLabel = {
         let label = CLTypingLabel()
-        label.text = K.appName
         label.textColor = UIColor.brandBlue
         label.font = .systemFont(ofSize: 50, weight: .black)
         return label
@@ -68,6 +67,11 @@ class WelcomeView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func startTitleAnimation() {
+        titleLabel.charInterval = 0.17
+        titleLabel.text = K.appName
     }
     
     @objc func registerButtonIsTapped(_ sender: UIButton) {

@@ -31,7 +31,7 @@ class RegisterController: UIViewController {
     override func loadView() {
         super.loadView()
         self.view = registerView
-        navigationController?.setupAppearance(with: UIColor.brandPurple)
+        navigationController?.setupAppearance(with: .brandBlue)
     }
     
     private func showAlert(error: String) {

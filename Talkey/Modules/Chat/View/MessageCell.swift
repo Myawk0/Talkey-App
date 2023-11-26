@@ -74,14 +74,23 @@ class MessageCell: UITableViewCell {
         dateLabel.text = time.dateValue().toHourFormat()
     }
     
+    var toGetMessages: Bool = false {
+        didSet {
+            leftImageView.image = toGetMessages ?  UIImage(named: "shrek") : UIImage(named: "fiona")
+            rightImageView.image = toGetMessages ?  UIImage(named: "shrek") : UIImage(named: "fiona")
+        }
+    }
+    
     func updateAppearanceOfCell(if isCurrentUser: Bool?) {
         if isCurrentUser! {
+            toGetMessages = false
             leftImageView.isHidden = true
             rightImageView.isHidden = false
             messageBubbleView.backgroundColor = UIColor.brandLightBlue
             messageLabel.textColor = UIColor.darkGray
             dateLabel.textAlignment = .right
         } else {
+            toGetMessages = true
             leftImageView.isHidden = false
             rightImageView.isHidden = true
             messageBubbleView.backgroundColor = UIColor.brandBlue
