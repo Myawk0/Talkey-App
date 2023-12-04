@@ -13,6 +13,7 @@ import Firebase
 protocol ChatViewDelegate: AnyObject {
     var countMessages: Int { get }
     var isCurrentUser: Bool { get }
+    var currentSenderEmail: String? { get }
     
     func getMessages(at index: Int) -> Message
     func sendMessage(with message: String)
@@ -21,6 +22,7 @@ protocol ChatViewDelegate: AnyObject {
 class ChatView: UIView {
     
     weak var delegate: ChatViewDelegate?
+    private var chatController: ChatController
     
     // MARK: - Views
     
@@ -31,7 +33,7 @@ class ChatView: UIView {
         tableView.estimatedRowHeight = 70
         tableView.sizeToFit()
         tableView.separatorStyle = .none
-        tableView.register(MessageCell.self, forCellReuseIdentifier: MessageCell.reuseIdentifier)
+        tableView.register(MessageCell.self, forCellReuseIdentifier: K.cellIdentifier)
         return tableView
     }()
     
@@ -49,39 +51,32 @@ class ChatView: UIView {
         return view
     }()
     
-    private lazy var messageTextField: UITextField = {
-        let textField = UITextField()
-        textField.layer.cornerRadius = 15
-        textField.setPaddingPoints(15)
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.gray
-        ]
-        let attributedPlaceholder = NSAttributedString(string: "Write a message...", attributes: attributes)
-        textField.attributedPlaceholder = attributedPlaceholder
-        textField.textColor = .darkGray
+    private lazy var messageTextField: TextField = {
+        let textField = TextField()
+        textField.placeholder = K.TextFieldPlaceholders.message
         textField.backgroundColor = .brandLightBlue
+        textField.textColor = .darkGray
+        textField.placeholderColor = .gray
         textField.returnKeyType = .send
         return textField
     }()
     
     private lazy var sendButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "paperplane.fill"), for: .normal)
+        button.setImage(UIImage.sendImage, for: .normal)
         button.tintColor = .brandBlue
         button.addTarget(self, action: #selector(sendButtonIsTapped), for: .touchUpInside)
         return button
     }()
     
     // MARK: - Init
+    
     init(frame: CGRect, controller: ChatController) {
+        self.chatController = controller
         super.init(frame: frame)
         backgroundColor = .white
         
-        messageTextField.delegate = self
-        tableView.delegate = self
-        tableView.dataSource = self
-        controller.delegate = self
-        
+        setupDelegates()
         addSubviews()
         applyConstraints()
     }
@@ -89,6 +84,17 @@ class ChatView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Setup Delegates
+    
+    private func setupDelegates() {
+        messageTextField.delegate = self
+        tableView.delegate = self
+        tableView.dataSource = self
+        chatController.delegate = self
+    }
+    
+    // MARK: - Selector
     
     @objc func sendButtonIsTapped(_ sender: UIButton) {
         if let message = messageTextField.text, !message.isEmpty {
@@ -102,7 +108,6 @@ class ChatView: UIView {
     
     private func addSubviews() {
         addSubview(tableView)
-        
         addSubview(stackView)
         stackView.addArrangedSubview(messageTextField)
         stackView.addArrangedSubview(sendButton)
@@ -134,11 +139,15 @@ class ChatView: UIView {
     }
 }
 
+// MARK: - UITextFieldDelegate
+
 extension ChatView: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let message = textField.text {
             delegate?.sendMessage(with: message)
@@ -147,19 +156,19 @@ extension ChatView: UITextFieldDelegate {
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField.text != "" {
-            return true
-        } else {
-            return false
-        }
+        return textField.text != ""
     }
 }
+
+// MARK: - UITableViewDelegate
 
 extension ChatView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
 }
+
+// MARK: - UITableViewDataSource
 
 extension ChatView: UITableViewDataSource {
     
@@ -168,20 +177,25 @@ extension ChatView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MessageCell.reuseIdentifier, for: indexPath) as! MessageCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.cellIdentifier, for: indexPath) as! MessageCell
         
-        if let message = delegate?.getMessages(at: indexPath.row) {
+        if let message = delegate?.getMessages(at: indexPath.row), let sender = delegate?.currentSenderEmail {
             cell.updateMessages(with: message.body, time: message.date)
+            cell.setupAvatars(of: sender)
         }
         
-        let isCurrentUser = delegate?.isCurrentUser
-        cell.updateAppearanceOfCell(if: isCurrentUser)
+        if let isCurrentUser = delegate?.isCurrentUser {
+            cell.updateAppearanceOfCell(if: isCurrentUser)
+        }
         
         return cell
     }
 }
 
+// MARK: - ChatControllerDelegate
+
 extension ChatView: ChatControllerDelegate {
+    
     func clearTextField() {
         messageTextField.text = ""
     }

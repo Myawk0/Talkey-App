@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 protocol RegisterViewDelegate: AnyObject {
-    func registerButtonIsTapped(email: String, password: String)
+    func registerButtonIsTapped(username: String, email: String, password: String)
 }
 
 class RegisterView: UIView {
@@ -35,15 +35,30 @@ class RegisterView: UIView {
         return label
     }()
     
-    private lazy var emailTextField: UITextField = {
-        let textField = UITextField()
-        setupTextField(for: textField, placeholder: K.TextFieldPlaceholders.email)
+    private lazy var usernameTextField: TextField = {
+        let textField = TextField()
+        textField.placeholder = K.TextFieldPlaceholders.username
+        textField.backgroundColor = .white
+        textField.textColor = .darkGray
+        textField.addShadow()
         return textField
     }()
     
-    private lazy var passwordTextField: UITextField = {
-        let textField = UITextField()
-        setupTextField(for: textField, placeholder: K.TextFieldPlaceholders.password)
+    private lazy var emailTextField: TextField = {
+        let textField = TextField()
+        textField.placeholder = K.TextFieldPlaceholders.email
+        textField.backgroundColor = .white
+        textField.textColor = .darkGray
+        textField.addShadow()
+        return textField
+    }()
+    
+    private lazy var passwordTextField: TextField = {
+        let textField = TextField()
+        textField.placeholder = K.TextFieldPlaceholders.password
+        textField.backgroundColor = .white
+        textField.textColor = .darkGray
+        textField.addShadow()
         textField.isSecureTextEntry = true
         return textField
     }()
@@ -77,33 +92,19 @@ class RegisterView: UIView {
     // MARK: - Delegates
     
     private func setupDelegates() {
+        usernameTextField.delegate = self
         emailTextField.delegate = self
         passwordTextField.delegate = self
     }
     
+    // MARK: - Selectors
+    
     @objc func registerButtonIsTapped(_ sender: UIButton) {
-        if let email = emailTextField.text, let password = passwordTextField.text {
-            delegate?.registerButtonIsTapped(email: email, password: password)
+        if let username = usernameTextField.text,
+           let email = emailTextField.text,
+           let password = passwordTextField.text {
+            delegate?.registerButtonIsTapped(username: username, email: email, password: password)
         }
-    }
-    
-    func setupTextField(for textField: UITextField, placeholder: String) {
-        textField.backgroundColor = .white
-        textField.autocapitalizationType = .none
-        textField.textAlignment = .left
-        textField.setPaddingPoints(15)
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.lightGray
-        ]
-        let attributedPlaceholder = NSAttributedString(string: placeholder, attributes: attributes)
-        textField.attributedPlaceholder = attributedPlaceholder
-        textField.font = .systemFont(ofSize: 20, weight: .regular)
-    
-        textField.layer.cornerRadius = 15
-        textField.addShadow()
-        
-        textField.textColor = .darkGray
-        textField.addTarget(self, action: #selector(textFieldsDidChange), for: .editingChanged)
     }
     
     // MARK: - Method when textField are edited
@@ -117,6 +118,7 @@ class RegisterView: UIView {
     private func addSubviews() {
         addSubview(stackView)
         stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(usernameTextField)
         stackView.addArrangedSubview(emailTextField)
         stackView.addArrangedSubview(passwordTextField)
         addSubview(registerButton)
@@ -127,8 +129,12 @@ class RegisterView: UIView {
     private func applyConstraints() {
         stackView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-50)
+            make.centerY.equalToSuperview().offset(-70)
             make.leading.trailing.equalToSuperview().inset(15)
+        }
+        
+        usernameTextField.snp.makeConstraints { make in
+            make.height.equalTo(50)
         }
         
         emailTextField.snp.makeConstraints { make in
@@ -147,17 +153,17 @@ class RegisterView: UIView {
     }
 }
 
+// MARK: - UITextFieldDelegate
+
 extension RegisterView: UITextFieldDelegate {
     
-    // MARK: - Close keyboard when tap a button "Return"
-    
+    // Close keyboard when tap a button "Return"
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    // MARK: - Close keyboard when tap on any place except textfield
-    
+    // Close keyboard when tap on any place except textfield
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         endEditing(true)
     }

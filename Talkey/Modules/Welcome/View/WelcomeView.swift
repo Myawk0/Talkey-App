@@ -21,7 +21,7 @@ class WelcomeView: UIView {
     
     private lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "chat")
+        imageView.image = UIImage.chatImage
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -69,10 +69,14 @@ class WelcomeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Method to start animation of title
+    
     func startTitleAnimation() {
         titleLabel.charInterval = 0.17
         titleLabel.text = K.appName
     }
+    
+    // MARK: - Selectors
     
     @objc func registerButtonIsTapped(_ sender: UIButton) {
         delegate?.registerButtonIsTapped()

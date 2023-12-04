@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import FirebaseStorage
 
 protocol ChatControllerDelegate: AnyObject {
     func reloadTableView()
@@ -15,17 +16,15 @@ protocol ChatControllerDelegate: AnyObject {
 
 class ChatController: UIViewController {
     
+    // MARK: - Properties
+    
     weak var delegate: ChatControllerDelegate?
-    
-    let db = Firestore.firestore()
-    
-    private var currentSender = ""
-    
-    // MARK: - Views
     
     private var chatView: ChatView?
     
-    var messages: [Message] = []
+    private let db = Firestore.firestore()
+    private var messages: [Message] = []
+    private var currentSender = ""
     
     // MARK: - Init
     
@@ -46,65 +45,94 @@ class ChatController: UIViewController {
         self.view = chatView
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.hidesBackButton = true
-        navigationController?.setupTitle()
-        navigationController?.setupLogOutButton()
-        
+        setupNavBar()
         loadMessages()
     }
     
-    func loadMessages() {
-        db.collection(K.FStore.collectionName)
-            .order(by: K.FStore.dateField)
-            .addSnapshotListener { querySnapshot, error in
-                
-                self.messages = []
-                
-                if let e = error {
-                    print("There was an issue setrieving data from Firestore, \(e)")
-                } else {
-                    if let snapshotDocuments = querySnapshot?.documents {
-                        for doc in snapshotDocuments {
-                            let data = doc.data()
-                            if let messageSender = data[K.FStore.senderField] as? String,
-                               let messageBody = data[K.FStore.bodyField] as? String,
-                               let messageDate = data[K.FStore.dateField] as? Timestamp {
-                                let newMessage = Message(sender: messageSender, body: messageBody, date: messageDate)
-                                self.messages.append(newMessage)
-                                
-                                DispatchQueue.main.async {
-                                    self.delegate?.reloadTableView()
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+    // MARK: - Setup Navigation Bar settings
+    
+    private func setupNavBar() {
+        navigationItem.hidesBackButton = true
+        navigationController?.setupTitle()
+        navigationController?.setupLogOutButton()
     }
     
-    func sendMessageToFirestore(with messageBody: String) {
-        if let messageSender = Auth.auth().currentUser?.email {
-            db.collection(K.FStore.collectionName).addDocument(data: [
-                K.FStore.senderField: messageSender,
-                K.FStore.bodyField: messageBody,
-                K.FStore.dateField: Date()
-            ]) { (error) in
-                if let e = error {
-                    print("There was an issue saving data to Firestore, \(e)")
-                } else {
-                    DispatchQueue.main.async {
-                        self.delegate?.clearTextField()
-                    }
+    // MARK: - Loading Messages from Firestore
+    
+    private func createMessage(from data: [String: Any]) -> Message? {
+        guard let messageSender = data[K.FStore.senderField] as? String,
+              let messageBody = data[K.FStore.bodyField] as? String,
+              let messageDate = data[K.FStore.dateField] as? Timestamp else { return nil }
+
+        return Message(sender: messageSender, body: messageBody, date: messageDate)
+    }
+    
+    private func handleSnapshotDocuments(_ snapshotDocuments: [QueryDocumentSnapshot]) {
+        messages = []
+
+        for doc in snapshotDocuments {
+            let messageData = doc.data()
+            guard let newMessage = self.createMessage(from: messageData) else { continue }
+
+            messages.append(newMessage)
+        }
+    }
+    
+    private func loadMessages() {
+        db.collection(K.FStore.collectionName).order(by: K.FStore.dateField).addSnapshotListener { querySnapshot, error in
+            if let e = error {
+                print("There was an issue setrieving data from Firestore, \(e)")
+            } else {
+                guard let snapshotDocuments = querySnapshot?.documents else { return }
+                self.handleSnapshotDocuments(snapshotDocuments)
+                
+                DispatchQueue.main.async {
+                    self.delegate?.reloadTableView()
+                }
+            }
+        }
+    }
+    
+    // MARK: - Saving Messages to Firestore
+    
+    private func sendMessageToFirestore(with messageBody: String) {
+        guard let messageSender = Auth.auth().currentUser?.email else { return }
+        
+        let messageData: [String: Any] = [
+            K.FStore.senderField: messageSender,
+            K.FStore.bodyField: messageBody,
+            K.FStore.dateField: Date()
+        ]
+        
+        saveDataToFirestore(data: messageData)
+    }
+    
+    private func saveDataToFirestore(data: [String: Any]) {
+        db.collection(K.FStore.collectionName).addDocument(data: data) { error in
+            if let e = error {
+                print("There was an issue saving data to Firestore, \(e)")
+            } else {
+                DispatchQueue.main.async {
+                    self.delegate?.clearTextField()
                 }
             }
         }
     }
 }
 
+// MARK: - ChatViewDelegate
+
 extension ChatController: ChatViewDelegate {
+    
+    var currentSenderEmail: String? {
+        return Auth.auth().currentUser?.email
+    }
+    
     var isCurrentUser: Bool {
         return currentSender == Auth.auth().currentUser?.email
     }

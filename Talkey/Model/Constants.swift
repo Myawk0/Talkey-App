@@ -8,8 +8,7 @@
 
 struct K {
     static let appName = "Talkey"
-    static let cellIdentifier = "ReusableCell"
-    static let cellNibName = "MessageCell"
+    static let cellIdentifier = "MessageCell"
     
     struct FStore {
         static let collectionName = "messages"
@@ -25,7 +24,9 @@ struct K {
     }
     
     struct TextFieldPlaceholders {
+        static let username = "Username"
         static let email = "Email"
         static let password = "Password"
+        static var message = "Write a message..."
     }
 }

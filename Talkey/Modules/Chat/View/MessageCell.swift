@@ -10,7 +10,7 @@ import Firebase
 
 class MessageCell: UITableViewCell {
     
-    static let reuseIdentifier = "MessageCell"
+    // MARK: - Views
     
     lazy var messageBubbleView: UIView = {
         let view = UIView()
@@ -29,7 +29,7 @@ class MessageCell: UITableViewCell {
     
     private lazy var leftImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "fiona")
+        imageView.image = UIImage.fionaImage
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 20
         imageView.contentMode = .scaleAspectFit
@@ -38,7 +38,7 @@ class MessageCell: UITableViewCell {
     
     private lazy var rightImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "shrek")
+        imageView.image = UIImage.shrekImage
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 20
         imageView.contentMode = .scaleAspectFit
@@ -53,6 +53,8 @@ class MessageCell: UITableViewCell {
         return label
     }()
     
+    // MARK: - Init
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = .white
@@ -64,33 +66,46 @@ class MessageCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
+    
+    // MARK: - Method to update messages data
     
     func updateMessages(with message: String, time: Timestamp) {
         messageLabel.text = message
         dateLabel.text = time.dateValue().toHourFormat()
     }
     
-    var toGetMessages: Bool = false {
-        didSet {
-            leftImageView.image = toGetMessages ?  UIImage(named: "shrek") : UIImage(named: "fiona")
-            rightImageView.image = toGetMessages ?  UIImage(named: "shrek") : UIImage(named: "fiona")
+    // MARK: - Method to get user avatar
+    
+    private func getCurrentUserAvatar(from sender: String) -> UIImage? {
+        switch sender {
+        case Users.shrek.email:
+            UserData.user = .shrek
+            return Users.shrek.image
+        case Users.fiona.email:
+            UserData.user = .fiona
+            return Users.fiona.image
+        default:
+            return UIImage(named: "MeAvatar")
         }
     }
     
-    func updateAppearanceOfCell(if isCurrentUser: Bool?) {
-        if isCurrentUser! {
-            toGetMessages = false
+    // MARK: - Method to setup avatar
+    
+    func setupAvatars(of sender: String) {
+        rightImageView.image = getCurrentUserAvatar(from: sender)
+        leftImageView.image = UserData.user == .shrek ? UIImage.fionaImage : UIImage.shrekImage
+    }
+    
+    // MARK: - Method to update appearance of cell from user
+    
+    func updateAppearanceOfCell(if isCurrentUser: Bool) {
+        if isCurrentUser {
             leftImageView.isHidden = true
             rightImageView.isHidden = false
             messageBubbleView.backgroundColor = UIColor.brandLightBlue
             messageLabel.textColor = UIColor.darkGray
             dateLabel.textAlignment = .right
         } else {
-            toGetMessages = true
             leftImageView.isHidden = false
             rightImageView.isHidden = true
             messageBubbleView.backgroundColor = UIColor.brandBlue
@@ -99,6 +114,8 @@ class MessageCell: UITableViewCell {
         }
     }
     
+    // MARK: - Subviews
+    
     private func addSubviews() {
         contentView.addSubview(leftImageView)
         contentView.addSubview(messageBubbleView)
@@ -106,6 +123,8 @@ class MessageCell: UITableViewCell {
         contentView.addSubview(rightImageView)
         contentView.addSubview(dateLabel)
     }
+    
+    // MARK: - Constraints
     
     private func applyConstraints() {
         

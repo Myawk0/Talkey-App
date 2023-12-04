@@ -35,16 +35,24 @@ class LoginView: UIView {
         return label
     }()
     
-    private lazy var emailTextField: UITextField = {
-        let textField = UITextField()
-        setupTextField(for: textField, placeholder: K.TextFieldPlaceholders.email)
-        //textField.text = "1@2.com"
+    private lazy var emailTextField: TextField = {
+        let textField = TextField()
+        textField.placeholder = K.TextFieldPlaceholders.email
+        textField.backgroundColor = .white.withAlphaComponent(0.3)
+        textField.textColor = .white
+        textField.placeholderColor = .white.withAlphaComponent(0.7)
+        textField.addShadow()
+        //textField.text = "shrek@mail.com"
         return textField
     }()
     
-    private lazy var passwordTextField: UITextField = {
-        let textField = UITextField()
-        setupTextField(for: textField, placeholder: K.TextFieldPlaceholders.password)
+    private lazy var passwordTextField: TextField = {
+        let textField = TextField()
+        textField.placeholder = K.TextFieldPlaceholders.password
+        textField.backgroundColor = .white.withAlphaComponent(0.3)
+        textField.textColor = .white
+        textField.placeholderColor = .white.withAlphaComponent(0.8)
+        textField.addShadow()
         textField.isSecureTextEntry = true
         //textField.text = "123456"
         return textField
@@ -83,29 +91,12 @@ class LoginView: UIView {
         passwordTextField.delegate = self
     }
     
+    // MARK: - Selectors
+    
     @objc func loginButtonIsTapped(_ sender: UIButton) {
         if let email = emailTextField.text, let password = passwordTextField.text {
             delegate?.loginButtonIsTapped(email: email, password: password)
         }
-    }
-    
-    func setupTextField(for textField: UITextField, placeholder: String) {
-        textField.backgroundColor = .white.withAlphaComponent(0.3)
-        textField.textAlignment = .left
-        textField.setPaddingPoints(15)
-        textField.autocapitalizationType = .none
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.white
-        ]
-        let attributedPlaceholder = NSAttributedString(string: placeholder, attributes: attributes)
-        textField.attributedPlaceholder = attributedPlaceholder
-        textField.font = .systemFont(ofSize: 20, weight: .regular)
-    
-        textField.layer.cornerRadius = 15
-        textField.addShadow()
-        
-        textField.textColor = .white
-        textField.addTarget(self, action: #selector(textFieldsDidChange), for: .editingChanged)
     }
     
     // MARK: - Method when textField are edited
@@ -149,17 +140,17 @@ class LoginView: UIView {
     }
 }
 
+// MARK: - UITextFieldDelegate
+
 extension LoginView: UITextFieldDelegate {
     
-    // MARK: - Close keyboard when tap a button "Return"
-    
+    // Close keyboard when tap a button "Return"
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    // MARK: - Close keyboard when tap on any place except textfield
-    
+    // Close keyboard when tap on any place except textfield
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         endEditing(true)
     }

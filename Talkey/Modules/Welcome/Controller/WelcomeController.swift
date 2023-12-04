@@ -39,6 +39,8 @@ class WelcomeController: UIViewController {
     }
 }
 
+// MARK: - WelcomeViewDelegate
+
 extension WelcomeController: WelcomeViewDelegate {
     func registerButtonIsTapped() {
         let registerController = RegisterController()
