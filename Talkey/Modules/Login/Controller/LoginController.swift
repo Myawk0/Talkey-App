@@ -12,6 +12,7 @@ class LoginController: UIViewController {
 
     // MARK: - Views
     
+    private var loginModel: LoginModel?
     private let loginView: LoginView
     
     // MARK: - Init
@@ -36,8 +37,10 @@ class LoginController: UIViewController {
     
     // MARK: - Method to Sign In
     
-    private func signInUser(email: String, password: String) {
-        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+    private func signInUser() {
+        guard let model = loginModel else { return }
+        
+        Auth.auth().signIn(withEmail: model.email, password: model.password) { authResult, error in
             if let e = error {
                 self.showAlert(error: e.localizedDescription)
             } else {
@@ -51,8 +54,10 @@ class LoginController: UIViewController {
 // MARK: - LoginViewDelegate
 
 extension LoginController: LoginViewDelegate {
-    func loginButtonIsTapped(email: String, password: String) {
-        signInUser(email: email, password: password)
+    
+    func loginButtonIsTapped(userData: LoginModel) {
+        self.loginModel = userData
+        signInUser()
     }
 }
 

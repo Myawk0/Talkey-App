@@ -12,6 +12,7 @@ class RegisterController: UIViewController {
     
     // MARK: - Views
     
+    private var registerModel: RegisterModel?
     private let registerView: RegisterView
     private let db = Firestore.firestore()
     
@@ -37,19 +38,19 @@ class RegisterController: UIViewController {
     
     // MARK: - Validate Text Fields
     
-    private func validateTextFields(username: String?, email: String?, password: String?, completion: @escaping (AuthResult) -> Void) {
+    private func validateTextFields(completion: @escaping (AuthResult) -> Void) {
         
-        guard let username = username, let email = email, let password = password else {
+        guard let model = registerModel else {
             completion(.failure(AuthError.unknownError))
             return
         }
 
-        guard Validators.isFilled(username: username, email: email, password: password) else {
+        guard Validators.isFilled(username: model.username, email: model.email, password: model.password) else {
             completion(.failure(AuthError.notFilled))
             return
         }
 
-        guard Validators.isSimpleEmail(email) else {
+        guard Validators.isSimpleEmail(model.email) else {
             completion(.failure(AuthError.invalidEmail))
             return
         }
@@ -57,21 +58,23 @@ class RegisterController: UIViewController {
     
     // MARK: - Register User
     
-    private func register(username: String, email: String, password: String) {
-        validateTextFields(username: username, email: email, password: password) { result in
+    private func register() {
+        validateTextFields() { result in
             switch result {
             case .success:
-                self.createUser(username: username, email: email, password: password)
+                self.createUser()
             case .failure(let error):
                 self.showAlert(error: error.localizedDescription)
             }
         }
     }
     
-    private func createUser(username: String, email: String, password: String) {
-        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+    private func createUser() {
+        guard let model = registerModel else { return }
+        
+        Auth.auth().createUser(withEmail: model.email, password: model.password) { authResult, error in
             let userData: [String: Any] = [
-                "username": username,
+                "username": model.username,
                 "uid": authResult!.user.uid
             ]
             
@@ -93,7 +96,9 @@ class RegisterController: UIViewController {
 // MARK: - RegisterViewDelegate
 
 extension RegisterController: RegisterViewDelegate {
-    func registerButtonIsTapped(username: String, email: String, password: String) {
-        createUser(username: username, email: email, password: password)
+    
+    func registerButtonIsTapped(userData: RegisterModel) {
+        self.registerModel = userData
+        register()
     }
 }

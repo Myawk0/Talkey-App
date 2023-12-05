@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Validators {
+struct Validators {
     
     static func isFilled(username: String, email: String, password: String) -> Bool {
         guard !username.isEmpty,

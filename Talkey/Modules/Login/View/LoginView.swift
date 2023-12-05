@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 protocol LoginViewDelegate: AnyObject {
-    func loginButtonIsTapped(email: String, password: String)
+    func loginButtonIsTapped(userData: LoginModel)
 }
 
 class LoginView: UIView {
@@ -94,9 +94,10 @@ class LoginView: UIView {
     // MARK: - Selectors
     
     @objc func loginButtonIsTapped(_ sender: UIButton) {
-        if let email = emailTextField.text, let password = passwordTextField.text {
-            delegate?.loginButtonIsTapped(email: email, password: password)
-        }
+        guard let email = emailTextField.text, let password = passwordTextField.text else { return }
+        
+        let data = LoginModel(email: email, password: password)
+        delegate?.loginButtonIsTapped(userData: data)
     }
     
     // MARK: - Method when textField are edited

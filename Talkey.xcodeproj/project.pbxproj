@@ -33,6 +33,8 @@
 		902643CD2B0E9E0600AC9EA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 902643CC2B0E9E0600AC9EA8 /* Assets.xcassets */; };
 		902643D02B0E9E0600AC9EA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 902643CE2B0E9E0600AC9EA8 /* LaunchScreen.storyboard */; };
 		906C22692B1B655E00951457 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906C22682B1B655E00951457 /* TextField.swift */; };
+		906C226B2B1F9CA800951457 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906C226A2B1F9CA800951457 /* LoginModel.swift */; };
+		906C226D2B1F9CD600951457 /* RegisterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906C226C2B1F9CD600951457 /* RegisterModel.swift */; };
 		90EECCA42B152DCA00FFF3C1 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EECCA32B152DCA00FFF3C1 /* UIImage.swift */; };
 		90EECCA72B15403200FFF3C1 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 90EECCA62B15403200FFF3C1 /* FirebaseStorage */; };
 		90EECCA92B154CC000FFF3C1 /* AuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EECCA82B154CC000FFF3C1 /* AuthError.swift */; };
@@ -67,6 +69,8 @@
 		902643CF2B0E9E0600AC9EA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		902643D12B0E9E0600AC9EA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		906C22682B1B655E00951457 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
+		906C226A2B1F9CA800951457 /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
+		906C226C2B1F9CD600951457 /* RegisterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterModel.swift; sourceTree = "<group>"; };
 		90EECCA32B152DCA00FFF3C1 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		90EECCA82B154CC000FFF3C1 /* AuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthError.swift; sourceTree = "<group>"; };
 		90EECCAA2B154CE600FFF3C1 /* AuthResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResult.swift; sourceTree = "<group>"; };
@@ -225,6 +229,7 @@
 		900E87A72B0F70F500D67DB9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				906C226C2B1F9CD600951457 /* RegisterModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -248,6 +253,7 @@
 		900E87AA2B0F711300D67DB9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				906C226A2B1F9CA800951457 /* LoginModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -418,6 +424,7 @@
 				906C22692B1B655E00951457 /* TextField.swift in Sources */,
 				900E87752B0EA9F800D67DB9 /* MessageCell.swift in Sources */,
 				902643C42B0E9E0400AC9EA8 /* AppDelegate.swift in Sources */,
+				906C226D2B1F9CD600951457 /* RegisterModel.swift in Sources */,
 				90EECCA92B154CC000FFF3C1 /* AuthError.swift in Sources */,
 				900E87982B0F3B5300D67DB9 /* UIColor.swift in Sources */,
 				900E87732B0EA9F800D67DB9 /* RegisterView.swift in Sources */,
@@ -431,6 +438,7 @@
 				900E87AD2B0FE4AE00D67DB9 /* Date.swift in Sources */,
 				900E879A2B0F4A0F00D67DB9 /* UIView.swift in Sources */,
 				90EECCAD2B154D0000FFF3C1 /* Validators.swift in Sources */,
+				906C226B2B1F9CA800951457 /* LoginModel.swift in Sources */,
 				90EECCAB2B154CE600FFF3C1 /* AuthResult.swift in Sources */,
 				900E87832B0EAA2600D67DB9 /* Constants.swift in Sources */,
 				900E877E2B0EAA1900D67DB9 /* LoginController.swift in Sources */,

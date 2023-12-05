@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 protocol RegisterViewDelegate: AnyObject {
-    func registerButtonIsTapped(username: String, email: String, password: String)
+    func registerButtonIsTapped(userData: RegisterModel)
 }
 
 class RegisterView: UIView {
@@ -100,11 +100,12 @@ class RegisterView: UIView {
     // MARK: - Selectors
     
     @objc func registerButtonIsTapped(_ sender: UIButton) {
-        if let username = usernameTextField.text,
-           let email = emailTextField.text,
-           let password = passwordTextField.text {
-            delegate?.registerButtonIsTapped(username: username, email: email, password: password)
-        }
+        guard let username = usernameTextField.text,
+              let email = emailTextField.text,
+              let password = passwordTextField.text else { return }
+        
+        let data = RegisterModel(username: username, email: email, password: password)
+        delegate?.registerButtonIsTapped(userData: data)
     }
     
     // MARK: - Method when textField are edited
